@@ -15,10 +15,8 @@ public class Main {
 		f.add(grid);
 		f.setSize(1000,1000);//400 width and 500 height  
 		f.setVisible(true);//making the frame visible 
-		
-		Box[][] g = grid.getGrid();
-		
-		Snake s = new Snake(0, 0, Direction.DOWN, g);
+				
+		Snake s = new Snake(0, 0, Direction.DOWN, grid.getGrid());
 		
 		f.addKeyListener(new KeyListener() {
 			@Override
@@ -51,7 +49,7 @@ public class Main {
 		});
 		
 		
-		while (s.move(g)) {
+		while (s.move(grid)) {
 						
 			try {
 				Thread.sleep(65);

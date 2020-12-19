@@ -1,3 +1,6 @@
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
 
 public class Snake {
 	private int x;
@@ -14,10 +17,17 @@ public class Snake {
 		tail.addEnd(grid[0][0]);
 		this.tail = tail;
 		
-		grid[x][y].setState(State.SNAKE);
+		grid[y][x].setState(State.SNAKE);
+		
+		Random r = new Random();
+		int randX = r.nextInt(grid[0].length - 1) + 1;
+		int randY = r.nextInt(grid.length - 1) + 1;
+		grid[randY][randX].setState(State.FOOD);
+		
 	}
 	
-	public boolean move(Box[][] grid) {
+	public boolean move(Grid g) {
+		Box[][] grid = g.getGrid();
 		switch (dir) {
 			case DOWN: 
 				y++;
@@ -45,16 +55,46 @@ public class Snake {
 		else if (y == grid.length) {
 			y = 0;
 		}
-	
-		Box end = tail.remove();
-		end.setState(State.EMPTY);
 		
 		Box rec = grid[y][x];
-		rec.setState(State.SNAKE);
 		
-		tail.addEnd(rec);
+		List<Box> empty = g.getEmpty();
+		
+		State curr = rec.getState();
+		
+		if (curr == State.SNAKE) {
+			return false;
+		}
+		else if (curr == State.FOOD) {
+			eat(rec, empty);
+		}
+		else {
+			Box end = tail.remove();
+			end.setState(State.EMPTY);
+			empty.add(end);
+			
+			
+			rec.setState(State.SNAKE);
+			empty.remove(rec);
+			
+			tail.addEnd(rec);
+		}
+	
+		
 		
 		return true;
+	}
+	
+	public void eat(Box rec, List<Box> empty) {
+		rec.setState(State.SNAKE);
+		tail.addEnd(rec);
+		
+		Random r = new Random();
+		int rand = r.nextInt(empty.size());
+		System.out.println(empty.size());
+		Box b = empty.remove(rand);
+		b.setState(State.FOOD);
+		
 	}
 	
 	public int getX() {
