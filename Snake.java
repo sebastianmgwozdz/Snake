@@ -91,7 +91,6 @@ public class Snake {
 		
 		Random r = new Random();
 		int rand = r.nextInt(empty.size());
-		System.out.println(empty.size());
 		Box b = empty.remove(rand);
 		b.setState(State.FOOD);
 		
@@ -118,7 +117,15 @@ public class Snake {
 	}
 	
 	public void setDir(Direction dir) {
+		if (vertical(this.dir) == vertical(dir)) {
+			return;
+		}
+		
 		this.dir = dir;
+	}
+	
+	public boolean vertical(Direction d) {
+		return d == Direction.DOWN || d == Direction.UP;
 	}
 	
 	public LinkedList getTail() {
